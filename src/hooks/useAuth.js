@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../services/supabase'
+import { supabase, isSupabaseConfigured } from '../services/supabase'
 import { useStore } from '../store/useStore'
 
 export const useAuth = () => {
@@ -22,33 +22,85 @@ export const useAuth = () => {
     return () => subscription.unsubscribe()
   }, [setUser])
 
-  const signUp = async (email, password, fullName) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-        },
-      },
-    })
-
-    if (!error && data.user) {
-      await supabase.from('profiles').insert({
-        id: data.user.id,
-        email: data.user.email,
-        full_name: fullName,
-      })
+  const handleAuthError = (error) => {
+    if (!isSupabaseConfigured()) {
+      return {
+        error: {
+          message: 'Konfigurasi Supabase belum diatur. Silakan hubungi administrator untuk mengatur VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY.'
+        }
+      }
     }
 
-    return { data, error }
+    if (error.message?.includes('fetch')) {
+      return {
+        error: {
+          message: 'Tidak dapat terhubung ke server. Pastikan koneksi internet Anda stabil dan URL Supabase sudah benar.'
+        }
+      }
+    }
+
+    return { error }
+  }
+
+  const signUp = async (email, password, fullName) => {
+    try {
+      if (!isSupabaseConfigured()) {
+        return handleAuthError({ message: 'Supabase not configured' })
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+        },
+      })
+
+      if (error) {
+        return handleAuthError(error)
+      }
+
+      if (!error && data.user) {
+        try {
+          await supabase.from('profiles').insert({
+            id: data.user.id,
+            email: data.user.email,
+            full_name: fullName,
+          })
+        } catch (profileError) {
+          console.warn('Failed to create profile:', profileError)
+        }
+      }
+
+      return { data, error }
+    } catch (error) {
+      console.error('SignUp error:', error)
+      return handleAuthError(error)
+    }
   }
 
   const signIn = async (email, password) => {
-    return await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    try {
+      if (!isSupabaseConfigured()) {
+        return handleAuthError({ message: 'Supabase not configured' })
+      }
+
+      const result = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (result.error) {
+        return handleAuthError(result.error)
+      }
+
+      return result
+    } catch (error) {
+      console.error('SignIn error:', error)
+      return handleAuthError(error)
+    }
   }
 
   const signOut = async () => {
