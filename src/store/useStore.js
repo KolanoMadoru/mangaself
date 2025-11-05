@@ -23,6 +23,13 @@ export const useStore = create(
         user: state.user,
         theme: state.theme 
       }),
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error('Error loading persisted state:', error)
+        } else {
+          console.log('State rehydrated successfully')
+        }
+      }
     }
   )
 )

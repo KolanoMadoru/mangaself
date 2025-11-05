@@ -2,6 +2,16 @@
 
 Platform berbasis web untuk berbagi dan tracking manga yang sedang kamu baca, dengan fitur sosial seperti bookmark, komentar, dan profile user.
 
+## 🔴 DEPLOYMENT FIX - White Screen Issue
+
+**Jika aplikasi menampilkan layar putih setelah deploy**, lihat panduan:
+- **[PERBAIKAN_SUMMARY.md](PERBAIKAN_SUMMARY.md)** ⭐ - **MULAI DARI SINI** - Summary lengkap & checklist
+- **[QUICK_FIX.md](QUICK_FIX.md)** - Solusi cepat 5 menit
+- **[ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md)** - Setup environment variables detail
+- **[DEPLOYMENT_FIX.md](DEPLOYMENT_FIX.md)** - Troubleshooting lengkap
+
+**TL;DR**: Set `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY` di Netlify Environment Variables, lalu deploy ulang.
+
 ## 🚀 Tech Stack
 
 - **Frontend**: React 18 + Vite
