@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import { useEffect } from 'react'
 import { useStore } from './store/useStore'
 
+import ErrorBoundary from './components/common/ErrorBoundary'
 import Layout from './components/layout/Layout'
 import ProtectedRoute from './components/common/ProtectedRoute'
 
@@ -37,57 +38,59 @@ function App() {
   }, [theme])
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: theme === 'dark' ? '#374151' : '#fff',
-              color: theme === 'dark' ? '#fff' : '#000',
-            },
-          }}
-        />
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          
-          <Route element={<Layout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/manga/:id" element={<MangaDetailPage />} />
-            <Route path="/profile/:userId" element={<ProfilePage />} />
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: theme === 'dark' ? '#374151' : '#fff',
+                color: theme === 'dark' ? '#fff' : '#000',
+              },
+            }}
+          />
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             
-            <Route
-              path="/manga/new"
-              element={
-                <ProtectedRoute>
-                  <NewMangaPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/manga/:id/edit"
-              element={
-                <ProtectedRoute>
-                  <EditMangaPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminPage />
-                </ProtectedRoute>
-              }
-            />
-          </Route>
-          
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+            <Route element={<Layout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/manga/:id" element={<MangaDetailPage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
+              
+              <Route
+                path="/manga/new"
+                element={
+                  <ProtectedRoute>
+                    <NewMangaPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manga/:id/edit"
+                element={
+                  <ProtectedRoute>
+                    <EditMangaPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <AdminPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+            
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
 
