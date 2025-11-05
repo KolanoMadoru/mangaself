@@ -1,0 +1,18 @@
+# Security Headers untuk Netlify
+/*
+  # Security headers
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  
+  # Cache control untuk assets
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache control untuk HTML
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Cache control untuk service worker (jika ada)
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate

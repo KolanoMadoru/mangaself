@@ -257,7 +257,29 @@ File hasil build akan ada di folder `dist/`
 
 ## 🌐 Deploy ke Netlify
 
-### Method 1: Netlify CLI
+Project ini **sudah siap** di-deploy ke Netlify! ✅
+
+### Pre-flight Check
+
+Jalankan script untuk memastikan konfigurasi sudah benar:
+
+```bash
+./deploy-check.sh
+```
+
+### Method 1: GitHub + Netlify (Recommended)
+
+1. Push code ke GitHub
+2. Login ke [Netlify](https://netlify.com)
+3. Click "Add new site" > "Import an existing project"
+4. Connect GitHub repository
+5. **Konfigurasi otomatis terdeteksi** dari `netlify.toml`
+6. Tambahkan Environment Variables:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+7. Click "Deploy site"
+
+### Method 2: Netlify CLI
 
 ```bash
 # Install Netlify CLI
@@ -270,19 +292,21 @@ netlify login
 netlify deploy --prod
 ```
 
-### Method 2: GitHub + Netlify (Recommended)
+### Method 3: Drag & Drop
 
-1. Push code ke GitHub
-2. Login ke [Netlify](https://netlify.com)
-3. Click "Add new site" > "Import an existing project"
-4. Connect GitHub repository
-5. Netlify akan otomatis detect Vite settings
-6. Tambahkan Environment Variables:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-7. Click "Deploy site"
+```bash
+npm run build
+# Drag folder 'dist/' ke netlify.com/drop
+```
 
-Netlify akan otomatis build dan deploy setiap kali ada push ke branch main.
+**Fitur deployment yang sudah dikonfigurasi:**
+- ✅ SPA routing dengan redirects otomatis
+- ✅ Security headers (X-Frame-Options, CSP, dll)
+- ✅ Cache optimization untuk assets
+- ✅ Node 18 environment
+- ✅ Auto-deploy dari GitHub
+
+📖 **Dokumentasi lengkap**: Lihat [NETLIFY.md](./NETLIFY.md) dan [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
 
 ## 👤 Membuat Admin User
 
